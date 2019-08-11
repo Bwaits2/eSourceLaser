@@ -1,0 +1,21 @@
+{% extends 'main/base.html' %}
+{% block body %}
+{% for rfq in rfqs %}
+<div>
+    {{ rfq.is_pending }}
+    {% if rfq.is_pending %}
+    <br>
+    {% endif %}
+    <h2>RFQ: <a href="{% url 'main:rfq-detail' rfq.id %}">{{ rfq.part.number }} - {{ rfq.quantity }}</a></h2>
+    {% if rfq.is_pending %}
+    </br>
+    {% endif %}
+    {% for quote in quotes %}
+    {% if quote.rfq == rfq %}
+    <div><h3><a href="{% url 'main:quote-detail' quote.id %}">{{ quote.user }}'s quote</a></h3></div>
+
+    {% endif %}
+    {% endfor %}
+</div>
+{% endfor %}
+{% endblock %}

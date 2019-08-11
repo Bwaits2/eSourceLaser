@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>esourceLaser</title>
+    {% load staticfiles %}
+    {% load filename %}
+</head>
+<body>
+{% for message in messages %}
+    <li class="{{ message.tags }}">
+    {% if 'safe' in message.tags %}{{ message|safe }}{% else %}{{ message }}{% endif %}
+    </li>
+{% endfor %}
+{% block body %}
+{% endblock %}
+{% block content %}
+{% endblock %}
+</body>
+</html>

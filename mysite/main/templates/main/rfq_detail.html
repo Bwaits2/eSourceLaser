@@ -1,0 +1,52 @@
+{% extends 'main/base.html' %}
+{% block body %}
+{% load filename %}
+<div><h1>{{ rfq.user.username }}'s RFQ: </h1></div>
+<div><h3>Part: <a href="{% url 'main:part-detail' rfq.part.id %}">{{ rfq.part }}</a></h3></div>
+<div><h3>Quantity: {{ rfq.quantity }}</h3></div>
+<div><h3>Secondary Finishing Process: {{ rfq.secondary_finishing_process }}</h3></div>
+<div><h3>Secondary Fabrication Process: {{ rfq.secondary_fabrication_process }}</h3></div>
+<div><h3>Zip Code: {{ rfq.zip_code }}</h3></div>
+<div><h3>Material Certification Required?: {{ rfq.material_certification_required }}</h3></div>
+<div><h3>Inspection Type: {{ rfq.inspection_type }}</h3></div>
+<div><h3>Notes: {{ rfq.notes }}</h3></div>
+<div><h3>Most interested in: {{ rfq.most_interested_in }}</h3></div>
+<div><h3></h3></div>
+
+{% if request.user|has_group:"Associate Admin" %}
+    <div><h2>Admin options: </h2></div>
+    {% if rfq.is_open == False %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12 col-md-7">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <form class="form-horizon" action="" method="post">
+                            {% csrf_token %}
+
+                            {% include 'main/form_template.html' %}
+
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <button type="submit" class="btn-xs">Open and save RFQ to be quoted</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% elif rfq.is_open == True %}
+    <div>
+        <form class="form-horizon" action="" method="post">
+        {% csrf_token %}
+            <button type="submit" class="btn-xs" value="close" id="close" name="close">Close RFQ from being quoted</button>
+        </form>
+    </div>
+    <div></div>
+    {% endif %}
+{% elif request.user|has_group:"Supplier" %}
+    <div><h4><a href="{% url 'main:quote-rfq' rfq.id %}">Quote this RFQ</a></h4></div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'main/base.html' %}
+{% block body %}
+
+{% if quote %}
+<h2>You already quoted this rfq</h2>
+{% else %}
+<div><h3>Hello {{ user.username }}!</h3></div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12 col-md-7">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <form class="form-horizon" action="" method="post">
+                            {% csrf_token %}
+
+                            {% include 'main/form_template.html' %}
+
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <button type="submit" class="btn btn-success">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+{% endblock %}

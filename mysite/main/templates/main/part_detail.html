@@ -1,0 +1,17 @@
+{% extends 'main/base.html' %}
+{% block body %}
+{% load filename %}
+<h1>Name: {{ part.name }}</h1>
+<h1>Number: {{ part.number }}</h1>
+<h1>Upload Date: {{ part.upload_date }}</h1>
+<h1>Material: {{ part.material }}</h1>
+<h1>Material Thickness: {{ part.material_thickness }}</h1>
+<h1>Process: {{ part.process }}</h1>
+<h1>Drawing: <a href="{{ part.drawing.url }}">{{ part.drawing|filename }}</a></h1>
+<h1>CAD Model: <a href="{{ part.cad_model.url }}">{{ part.cad_model|filename }}</a></h1>
+{% if edit_allowed %}
+<a class="btn main-btn btn-block" href="{% url 'main:edit-part' part.id %}">Edit Part</a>
+{% else %}
+<a class="btn main-btn btn-block disabled" data-toggle="tooltip" title="Hooray!" href="/messages/write">Edit Part</a>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'main/base.html' %}
+{% block body %}
+
+{% for rfq in rfqs %}
+    <h3><a href="{% url 'main:rfq-detail' rfq.id %}">{{ rfq.part.number }}</a></h3>
+    {% for quote in quotes %}
+        {% if quote.rfq == rfq %}
+        You already quoted this
+        <h3><a href="{% url 'main:quote-detail' quote.id %}">Check status</a></h3>
+        {% endif %}
+    {% endfor %}
+{% endfor %}
+
+{% endblock %}

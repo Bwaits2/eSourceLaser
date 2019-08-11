@@ -1,0 +1,65 @@
+{% extends 'main/base.html' %}
+{% block body %}
+{% load filename %}
+
+<div>
+    <h3>Quantity: {{ quote.quantity }}</h3>
+    <h3>Price Each: {{ quote.price_each }}</h3>
+    <h3>Proposed Ship Date: {{ quote.proposed_ship_date }}</h3>
+    <h3>Estimated Package Weight: {{ quote.estimated_package_weight }}</h3>
+    <h3>Package length: {{ quote.package_length }}</h3>
+    <h3>Package width: {{ quote.package_width }}</h3>
+    <h3>Package height: {{ quote.package_height }}</h3>
+    <h3>Notes: {{ quote.notes }}</h3>
+</div>
+{% if request.user|has_group:"Associate Admin" %}
+    <div><h2>Admin options: </h2></div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12 col-md-7">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <form class="form-horizon" action="" method="post">
+                                {% csrf_token %}
+
+                                {% include 'main/form_template.html' %}
+
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <button type="submit" class="btn btn-success" name="without_award">Save quote without awarding this supplier</button>
+                                        <button type="submit" class="btn btn-success" name="with_award">Save quote and award this supplier</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% elif request.user|has_group:"Buyer" %}
+    {% if quote.needs_payment %}
+        <h2>{{ quote.total }}</h2>
+        <h2><a href="{% url 'main:buyer-pay' quote.rfq.id %}">Pay for this quote on your RFQ</a></h2>
+    {% else %}
+        <h2>{{ quote.status }} as of {{ quote.last_status_change_time }}</h2>
+        {% if shipment %}
+        <h3><a href="{% url 'main:shipment-detail' shipment.id %}">Track Shipment</a></h3>
+{% endif %}
+    {% endif %}
+{% elif request.user|has_group:"Supplier" %}
+    {% if quote.awarded %}
+    <h3>Congrats! this quote was awarded</h3>
+        {% if quote.needs_payment %}
+        <h3>Waiting on buyer's payment</h3>
+        {% else %}
+{% if shipment %}
+        <h3><a href="{% url 'main:shipment-detail' shipment.id %}">Track Shipment</a></h3>
+{% endif %}
+        {% endif %}
+    {% elif quote.awarded == False %}
+        <h1>This quote was not awarded</h1>
+    {% else %}
+        <h2>Still waiting on admins</h2>
+    {% endif %}
+{% endif %}
+{% endblock %}

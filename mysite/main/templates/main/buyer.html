@@ -1,0 +1,17 @@
+{% extends 'main/base.html' %}
+{% block body %}
+
+{% for rfq in rfqs %}
+<div>
+    <h3>{{ rfq.id }}</h3>
+
+    {% for quote in quotes %}
+    {% if quote.rfq == rfq %}
+    <h3><a href="{% url 'main:quote-detail' quote.id %}">all yours</a></h3>
+    {% endif %}
+    {% endfor %}
+
+</div>
+{% endfor %}
+
+{% endblock %}
